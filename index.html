@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gift Card Business Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0b0e14; --panel:#131722; --panel2:#1a2030; --border:#252c3d;
+  --text:#e8ebf2; --muted:#8b93a7; --accent:#5b8def; --accent2:#7ee0c0;
+  --good:#3ecf8e; --warn:#e0b23e; --bad:#e0645e;
+  --ai:#5b8def; --tcb:#7ee0c0; --qcgc:#e0a45b;
+  --radius:12px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f5f6f9; --panel:#ffffff; --panel2:#f0f2f7; --border:#e2e5ec;
+    --text:#1b1f2a; --muted:#5c6377; --accent:#3a6fd8; --accent2:#1f9c78;
+    --good:#1f9c78; --warn:#a9770d; --bad:#c9433d;
+  }
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 20px 60px;}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px;}
+h1{font-size:1.4rem;margin:0 0 4px;}
+.sub{color:var(--muted);font-size:0.85rem;}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+select,button,input[type=text]{
+  background:var(--panel2);color:var(--text);border:1px solid var(--border);
+  border-radius:8px;padding:8px 12px;font-size:0.85rem;
+}
+button{cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+button.primary{background:var(--accent);color:white;border-color:var(--accent);font-weight:600;}
+button.primary:hover{opacity:0.9;}
+button:disabled{opacity:0.5;cursor:not-allowed;}
+.spin{animation:spin 0.9s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#status{font-size:0.78rem;color:var(--muted);}
+#status.err{color:var(--bad);}
+nav.tabs{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+nav.tabs button{background:transparent;border:none;border-radius:0;padding:10px 16px;color:var(--muted);font-weight:600;border-bottom:2px solid transparent;}
+nav.tabs button.active{color:var(--text);border-bottom-color:var(--accent);}
+.view{display:none;}
+.view.active{display:block;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px;}
+.kpi{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
+.kpi .label{color:var(--muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;}
+.kpi .value{font-size:1.6rem;font-weight:700;margin-top:6px;}
+.kpi .delta{font-size:0.78rem;margin-top:4px;}
+.delta.up{color:var(--good);} .delta.down{color:var(--bad);}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:20px;}
+.panel h2{margin:0 0 4px;font-size:1rem;}
+.panel .desc{color:var(--muted);font-size:0.8rem;margin-bottom:14px;}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:20px;}
+@media (max-width:900px){.grid2{grid-template-columns:1fr;}}
+canvas{max-width:100%;}
+table{width:100%;border-collapse:collapse;font-size:0.83rem;}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+th{color:var(--muted);font-weight:600;cursor:pointer;position:sticky;top:0;background:var(--panel);}
+th:hover{color:var(--text);}
+tbody tr:hover{background:var(--panel2);}
+.tablewrap{overflow-x:auto;max-height:560px;overflow-y:auto;}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:0.72rem;font-weight:600;}
+.badge.ai{background:color-mix(in srgb, var(--ai) 20%, transparent);color:var(--ai);}
+.badge.tcb{background:color-mix(in srgb, var(--tcb) 20%, transparent);color:var(--tcb);}
+.badge.qcgc{background:color-mix(in srgb, var(--qcgc) 20%, transparent);color:var(--qcgc);}
+.badge.paid{background:color-mix(in srgb, var(--good) 20%, transparent);color:var(--good);}
+.badge.pending{background:color-mix(in srgb, var(--warn) 20%, transparent);color:var(--warn);}
+.pos{color:var(--good);} .neg{color:var(--bad);}
+.rank{color:var(--muted);width:26px;display:inline-block;}
+.calc{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.calc label{display:block;font-size:0.75rem;color:var(--muted);margin-bottom:4px;}
+.calc input{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;font-size:0.9rem;}
+.score{padding:16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--panel2);}
+.score .big{font-size:1.8rem;font-weight:700;}
+.verdict{display:inline-block;margin-top:6px;padding:4px 12px;border-radius:99px;font-weight:700;font-size:0.85rem;}
+.v-great{background:color-mix(in srgb, var(--good) 25%, transparent);color:var(--good);}
+.v-good{background:color-mix(in srgb, var(--accent2) 25%, transparent);color:var(--accent2);}
+.v-avg{background:color-mix(in srgb, var(--warn) 25%, transparent);color:var(--warn);}
+.v-bad{background:color-mix(in srgb, var(--bad) 25%, transparent);color:var(--bad);}
+.empty{color:var(--muted);text-align:center;padding:40px 0;}
+footer{color:var(--muted);font-size:0.75rem;text-align:center;margin-top:30px;}
+a{color:var(--accent);}
+.search{margin-bottom:12px;}
+.filters{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Gift Card Buying Group — Dashboard</h1>
+      <div class="sub" id="lastSync">Not synced yet</div>
+    </div>
+    <div class="controls">
+      <select id="siteFilter">
+        <option value="all">All sites</option>
+        <option value="Aligned Incentives">Aligned Incentives</option>
+        <option value="TheCardBay">TheCardBay</option>
+        <option value="QCGC">QCGC</option>
+      </select>
+      <select id="yearFilter"><option value="all">All years</option></select>
+      <button class="primary" id="refreshBtn" onclick="loadAll(true)">⟳ Refresh data</button>
+    </div>
+  </header>
+  <div id="status"></div>
+
+  <nav class="tabs">
+    <button data-view="overview" class="active">Overview</button>
+    <button data-view="brands">Brand Playbook</button>
+    <button data-view="cards">Cards</button>
+    <button data-view="cashflow">Cash Flow</button>
+    <button data-view="calc">Deal Score Calculator</button>
+    <button data-view="log">Deal Log</button>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section class="view active" id="view-overview">
+    <div class="kpis" id="kpiRow"></div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Monthly profit</h2>
+        <div class="desc">Face-value margin (Denom − Buy Price) + rewards bonus (Actual Profit column), stacked by site.</div>
+        <canvas id="monthlyChart" height="110"></canvas>
+      </div>
+      <div class="panel">
+        <h2>Profit by site</h2>
+        <div class="desc">Where your best margins actually come from.</div>
+        <canvas id="siteChart" height="180"></canvas>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Deal volume per month</h2>
+        <div class="desc">Number of cards logged each month — spot the busy season.</div>
+        <canvas id="volumeChart" height="110"></canvas>
+      </div>
+      <div class="panel">
+        <h2>Status breakdown</h2>
+        <div class="desc">Paid vs. still-pending payout.</div>
+        <canvas id="statusChart" height="180"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="view" id="view-brands">
+    <div class="panel">
+      <h2>Brand Playbook — prioritize incoming deals</h2>
+      <div class="desc">Ranked by total profit. Use this when a new deal comes in: if the brand already ranks high with a strong avg margin, jump on it first. Click a column header to re-sort.</div>
+      <input type="text" class="search" id="brandSearch" placeholder="Filter by brand or site...">
+      <div class="tablewrap"><table id="brandTable"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="view" id="view-cards">
+    <div class="panel">
+      <h2>Card performance</h2>
+      <div class="desc">Which payment card has produced the best stacked rewards bonus historically — use this to pick which card to pay with on the next deal.</div>
+      <div class="tablewrap"><table id="cardTable"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- CASH FLOW -->
+  <section class="view" id="view-cashflow">
+    <div class="kpis" id="cashKpis"></div>
+    <div class="panel">
+      <h2>Outstanding payouts</h2>
+      <div class="desc">Deals not yet marked Paid, oldest expected payment first — chase these up.</div>
+      <div class="tablewrap"><table id="pendingTable"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section class="view" id="view-calc">
+    <div class="panel">
+      <h2>Deal Score Calculator</h2>
+      <div class="desc">Punch in the numbers from a deal as it comes in, before you commit — see how it stacks up against your own history for that brand.</div>
+      <div class="calc">
+        <div><label>Brand</label><input type="text" id="c_brand" list="brandList" placeholder="e.g. Tommy Hilfiger"></div>
+        <datalist id="brandList"></datalist>
+        <div><label>Denomination ($)</label><input type="number" id="c_denom" step="0.01" placeholder="200"></div>
+        <div><label>Buy price ($)</label><input type="number" id="c_buyprice" step="0.01" placeholder="170"></div>
+        <div><label>Est. rewards bonus % of buy price</label><input type="number" id="c_rewards" step="0.1" placeholder="e.g. 5"></div>
+      </div>
+      <div class="grid2">
+        <div class="score">
+          <div class="sub">Buy rate</div>
+          <div class="big" id="r_rate">—</div>
+          <div class="sub" id="r_rateNote">enter values above</div>
+        </div>
+        <div class="score">
+          <div class="sub">Estimated total profit</div>
+          <div class="big" id="r_profit">—</div>
+          <div id="r_verdict"></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:16px;box-shadow:none;background:var(--panel2);">
+        <h2>How this brand has performed for you</h2>
+        <div id="c_history" class="desc">Type a brand name above that you've logged before.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOG -->
+  <section class="view" id="view-log">
+    <div class="panel">
+      <h2>Full deal log</h2>
+      <div class="filters">
+        <input type="text" class="search" id="logSearch" placeholder="Search brand, card, site bought from...">
+      </div>
+      <div class="tablewrap"><table id="logTable"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <footer>
+    Data pulled live from your <a id="sheetLink" href="#" target="_blank" rel="noopener">Google Sheet</a>.
+    Nothing is stored on a server — the sheet is read directly by your browser and cached locally for offline viewing.
+  </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
