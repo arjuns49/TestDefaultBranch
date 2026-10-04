@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Death Valley Trip · Nov 26–29</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --sea:       #B5532D;
+  --sea-mid:   #D98A5B;
+  --sea-pale:  #FBEFE6;
+  --lemon:     #E8A020;
+  --lemon-pale:#FDF6E3;
+  --sage:      #6B7F4A;
+  --sage-pale: #F1F3E6;
+  --terra:     #C2562E;
+  --terra-pale:#FBF0EB;
+  --gold:      #C8963E;
+  --ink:       #1C1917;
+  --stone:     #78716C;
+  --dust:      #F6EFE4;
+  --border:    #E8DCC8;
+  --white:     #FFFBF4;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--dust);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  background: var(--sea);
+  overflow: hidden;
+  padding: 0;
+}
+.hero-wave {
+  position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 60px;
+}
+.hero-inner {
+  padding: 3.5rem 1.5rem 4.5rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+/* animated water rings — the signature element */
+.rings {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden; pointer-events: none;
+}
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08);
+  animation: expand 8s ease-out infinite;
+}
+.ring:nth-child(1){width:300px;height:300px;top:-80px;right:-60px;animation-delay:0s;}
+.ring:nth-child(2){width:500px;height:500px;top:-180px;right:-160px;animation-delay:2s;}
+.ring:nth-child(3){width:200px;height:200px;bottom:-60px;left:-40px;animation-delay:4s;}
+.ring:nth-child(4){width:380px;height:380px;bottom:-140px;left:-120px;animation-delay:6s;}
+@keyframes expand {
+  0%  {opacity:0.6;transform:scale(0.85);}
+  50% {opacity:0.3;}
+  100%{opacity:0;transform:scale(1.15);}
+}
+
+.hero-eyebrow {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 1rem;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.6rem, 8vw, 4.2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.05;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.hero-dates {
+  font-size: 13px; color: rgba(255,255,255,0.65);
+  font-weight: 300; letter-spacing: 0.08em;
+  margin-bottom: 2rem;
+}
+.hero-chips {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+}
+.hero-chip {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  font-size: 12px; font-weight: 400;
+  padding: 5px 13px; border-radius: 20px;
+}
+.trip-nav { margin-top: 18px; }
+.trip-nav a {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  font-size: 12px; font-weight: 500;
+  padding: 6px 15px; border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.trip-nav a:hover { background: rgba(255,255,255,0.22); }
+
+/* ── DAY STRIP ── */
+.day-strip {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+.day-strip::-webkit-scrollbar{display:none;}
+.strip-tab {
+  flex: 0 0 auto;
+  padding: 14px 20px 12px;
+  cursor: pointer;
+  text-align: center;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  min-width: 80px;
+}
+.strip-tab:hover { background: var(--dust); }
+.strip-tab.active { border-bottom-color: var(--sea); }
+.strip-day { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone); }
+.strip-date { font-size: 13px; font-weight: 500; color: var(--ink); margin-top: 1px; }
+.strip-icon { font-size: 16px; margin-top: 2px; }
+
+/* ── LAYOUT ── */
+.container { max-width: 680px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+
+/* ── DAY SECTIONS ── */
+.day-section { display: none; }
+.day-section.active { display: block; }
+
+.day-hero {
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+.day-hero-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.65; margin-bottom: 0.3rem;
+}
+.day-hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; font-weight: 400; font-style: italic;
+  line-height: 1.15; margin-bottom: 0.2rem;
+}
+.day-hero-sub { font-size: 12.5px; opacity: 0.7; }
+
+/* day color themes */
+.theme-blue  { background: #3E6B7E; color: white; }
+.theme-green { background: #5E7A45; color: white; }
+.theme-orange{ background: #C2562E; color: white; }
+.theme-purple{ background: #6B4B7A; color: white; }
+.theme-gold  { background: #9A7B2E; color: white; }
+
+/* ── TIMELINE ── */
+.timeline { margin-bottom: 1.25rem; }
+.tl-item {
+  display: flex; gap: 14px;
+  margin-bottom: 4px;
+}
+.tl-left {
+  display: flex; flex-direction: column; align-items: center;
+  width: 16px; flex-shrink: 0; padding-top: 4px;
+}
+.tl-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0; border: 2px solid white;
+  box-shadow: 0 0 0 1.5px currentColor;
+}
+.tl-connector {
+  width: 1.5px; flex: 1; min-height: 16px;
+  background: var(--border); margin-top: 4px;
+}
+.tl-item:last-child .tl-connector { display: none; }
+.tl-right { flex: 1; padding-bottom: 18px; }
+.tl-time {
+  font-size: 11px; font-weight: 500; color: var(--stone);
+  margin-bottom: 2px; letter-spacing: 0.02em;
+}
+.tl-title { font-size: 14px; font-weight: 500; line-height: 1.35; margin-bottom: 3px; }
+.tl-desc { font-size: 12.5px; color: var(--stone); line-height: 1.55; }
+
+/* dot colors per theme */
+.theme-blue .tl-dot   { color: #3E6B7E; }
+.theme-green .tl-dot  { color: #5E7A45; }
+.theme-orange .tl-dot { color: #C2562E; }
+.theme-purple .tl-dot { color: #6B4B7A; }
+.theme-gold .tl-dot   { color: #9A7B2E; }
+
+/* override dot colors in timeline (outside hero) */
+.tl-dot.blue   { color: #3E6B7E; }
+.tl-dot.green  { color: #5E7A45; }
+.tl-dot.orange { color: #C2562E; }
+.tl-dot.purple { color: #6B4B7A; }
+.tl-dot.gold   { color: #9A7B2E; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+}
+.card-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--stone); margin-bottom: 0.85rem;
+}
+
+/* ── RESTAURANT CHIPS ── */
+.rest-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.rest-item:last-child { border-bottom: none; padding-bottom: 0; }
+.rest-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.rest-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.rest-detail { font-size: 12px; color: var(--stone); line-height: 1.45; }
+.rest-price {
+  margin-left: auto; font-size: 11px; font-weight: 600;
+  color: var(--sage); flex-shrink: 0; padding-top: 3px;
+}
+.book-tag {
+  display: inline-block; font-size: 9px; font-weight: 600;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 4px;
+  background: #FEF3C7; color: #92400E; margin-left: 5px;
+  vertical-align: middle;
+}
+
+/* ── CALLOUT ── */
+.callout {
+  border-radius: 12px; padding: 12px 14px;
+  font-size: 12.5px; line-height: 1.55;
+  display: flex; gap: 10px; margin-bottom: 1rem;
+}
+.callout.warn { background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; }
+.callout.info { background: var(--sea-pale); border: 1px solid #E8C9B0; color: #7A3A1C; }
+.callout.tip  { background: var(--sage-pale); border: 1px solid #BCCB98; color: #46592E; }
+.callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── TRANSPORT PILLS ── */
+.transport-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.transport-item {
+  background: var(--dust); border-radius: 12px; padding: 11px 13px;
+}
+.transport-route { font-size: 12px; font-weight: 500; margin-bottom: 3px; }
+.transport-detail { font-size: 11px; color: var(--stone); line-height: 1.4; }
+.transport-cost { font-size: 11px; font-weight: 600; color: var(--sage); margin-top: 3px; }
+
+/* ── BOOKING SECTION ── */
+.booking-card {
+  background: #FFF8EE;
+  border: 1.5px solid #F6AD55;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.booking-card h3 {
+  font-size: 13px; font-weight: 600; color: #92400E;
+  margin-bottom: 1rem; letter-spacing: 0.02em;
+}
+.book-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 7px 0; border-bottom: 1px solid #FDECC8;
+  font-size: 13px; color: #744210;
+}
+.book-item:last-child { border-bottom: none; padding-bottom: 0; }
+.book-urgency {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 2px 7px; border-radius: 4px;
+  flex-shrink: 0; margin-top: 2px;
+}
+.urgent { background: #C05621; color: white; }
+.soon   { background: #F6AD55; color: #744210; }
+.later  { background: #FEF3C7; color: #92400E; }
+
+/* ── OVERVIEW TAB ── */
+.overview-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.overview-stat {
+  background: var(--white); border-radius: 14px;
+  padding: 1rem; border: 1px solid var(--border); text-align: center;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 300; color: var(--sea);
+  line-height: 1; margin-bottom: 4px;
+}
+.stat-label { font-size: 11px; color: var(--stone); }
+
+.day-summary {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--white); border-radius: 14px;
+  padding: 1rem 1.1rem; border: 1px solid var(--border);
+  margin-bottom: 8px; cursor: pointer;
+}
+.day-summary:hover { background: var(--dust); }
+.ds-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+}
+.ds-title { font-size: 14px; font-weight: 500; }
+.ds-date  { font-size: 12px; color: var(--stone); margin-top: 1px; }
+.ds-arrow { margin-left: auto; color: var(--stone); font-size: 16px; align-self: center; }
+
+.c-blue   { background: #E3EEF2; color: #3E6B7E; }
+.c-green  { background: #EAF0DD; color: #5E7A45; }
+.c-orange { background: #F8E6DC; color: #C2562E; }
+.c-purple { background: #EFE5F2; color: #6B4B7A; }
+.c-gold   { background: #F7F0DC; color: #9A7B2E; }
+
+@media(max-width:480px){
+  .transport-grid{grid-template-columns:1fr;}
+  .overview-grid{grid-template-columns:1fr 1fr;}
+  .hero h1{font-size:2.4rem;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Family Trip · Thanksgiving 2026</div>
+    <h1>Death Valley</h1>
+    <div class="hero-dates">November 26 – 29 &nbsp;·&nbsp; Stovepipe Wells Village</div>
+    <div class="hero-chips">
+      <span class="hero-chip">🏜 Mesquite Dunes</span>
+      <span class="hero-chip">🥾 Golden Canyon</span>
+      <span class="hero-chip">🌅 Badwater</span>
+      <span class="hero-chip">🦃 Thanksgiving dinner</span>
+    </div>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#F6EFE4"/></svg>
+</div>
+
+<div class="day-strip"><div class="strip-tab active" onclick="showDay('overview',this)"><div class="strip-day">Plan</div><div class="strip-date">Overview</div><div class="strip-icon">🏜</div></div><div class="strip-tab" onclick="showDay('d0',this)"><div class="strip-day">Wed</div><div class="strip-date">Nov 25</div><div class="strip-icon">🚗</div></div><div class="strip-tab" onclick="showDay('d1',this)"><div class="strip-day">Thu</div><div class="strip-date">Nov 26</div><div class="strip-icon">🦃</div></div><div class="strip-tab" onclick="showDay('d2',this)"><div class="strip-day">Fri</div><div class="strip-date">Nov 27</div><div class="strip-icon">🥾</div></div><div class="strip-tab" onclick="showDay('d3',this)"><div class="strip-day">Sat</div><div class="strip-date">Nov 28</div><div class="strip-icon">✨</div></div><div class="strip-tab" onclick="showDay('d4',this)"><div class="strip-day">Sun</div><div class="strip-date">Nov 29</div><div class="strip-icon">🏠</div></div></div>
+
+<div class="container">
+
+  <div class="day-section active" id="overview">
+    <div class="overview-grid">
+      <div class="overview-stat"><div class="stat-num">3</div><div class="stat-label">nights in the park</div></div>
+      <div class="overview-stat"><div class="stat-num">−282 ft</div><div class="stat-label">Badwater Basin</div></div>
+      <div class="overview-stat"><div class="stat-num">8 mi</div><div class="stat-label">hiking over 2 days</div></div>
+      <div class="overview-stat"><div class="stat-num">1</div><div class="stat-label">Thanksgiving feast</div></div>
+    </div>
+
+    <div class="booking-card">
+      <h3>📋 Book before you leave</h3>
+      <div class="book-item"><span class="book-urgency urgent">Urgent</span><span><strong>Thanksgiving dinner, Toll Road Restaurant</strong>: reserve for 6 on Nov 26 and confirm menu. Call (760) 786-7090.</span></div>
+      <div class="book-item"><span class="book-urgency urgent">Urgent</span><span><strong>Friends’ rooms at Stovepipe Wells</strong>: confirm they are booked for the same dates.</span></div>
+      <div class="book-item"><span class="book-urgency soon">Soon</span><span><strong>Lone Pine motel for Nov 25</strong> (if doing the overnight stop). Thanksgiving week sells out.</span></div>
+      <div class="book-item"><span class="book-urgency soon">Soon</span><span><strong>Entrance fee</strong>: $30 per vehicle (valid 7 days; confirm 2026 price at nps.gov/deva). Or an annual America the Beautiful pass.</span></div>
+      <div class="book-item"><span class="book-urgency later">Day before</span><span><strong>Check NPS conditions</strong> (nps.gov/deva/planyourvisit/conditions.htm) and Caltrans QuickMap for road status.</span></div>
+    </div>
+
+    <div class="card-label">Your 5 days</div>
+    <div class="day-summary" onclick="showDay('d0',null)">
+      <div class="ds-num c-gold">0</div>
+      <div><div class="ds-title">Drive + Alabama Hills</div><div class="ds-date">Wednesday, Nov 25</div></div>
+      <div class="ds-arrow">›</div>
+    </div>
+    <div class="day-summary" onclick="showDay('d1',null)">
+      <div class="ds-num c-orange">1</div>
+      <div><div class="ds-title">Arrive + dunes + Thanksgiving dinner</div><div class="ds-date">Thursday, Nov 26</div></div>
+      <div class="ds-arrow">›</div>
+    </div>
+    <div class="day-summary" onclick="showDay('d2',null)">
+      <div class="ds-num c-purple">2</div>
+      <div><div class="ds-title">Badlands + Badwater adventure day</div><div class="ds-date">Friday, Nov 27</div></div>
+      <div class="ds-arrow">›</div>
+    </div>
+    <div class="day-summary" onclick="showDay('d3',null)">
+      <div class="ds-num c-green">3</div>
+      <div><div class="ds-title">Mosaic Canyon + pool + stars</div><div class="ds-date">Saturday, Nov 28</div></div>
+      <div class="ds-arrow">›</div>
+    </div>
+    <div class="day-summary" onclick="showDay('d4',null)">
+      <div class="ds-num c-blue">4</div>
+      <div><div class="ds-title">Check out + drive home</div><div class="ds-date">Sunday, Nov 29</div></div>
+      <div class="ds-arrow">›</div>
+    </div>
+
+    <div class="card" style="margin-top:1.25rem">
+      <div class="card-label">Good to know</div>
+      <div class="callout info"><span class="callout-icon">🌡</span><span><b>Weather (late Nov):</b> highs ~65–70°F, lows ~40–45°F. Dress in layers; it is cold at night and in canyon shade. Check the forecast the week before.</span></div>
+      <div class="callout warn"><span class="callout-icon">⛽</span><span><b>No cell service</b> across most of the park. Download offline maps (Google Maps / Gaia). Fuel at Stovepipe Wells, Furnace Creek and Panamint Springs only.</span></div>
+      <div class="callout warn"><span class="callout-icon">🚧</span><span><b>Closed:</b> Scotty’s Castle and Bonnie Clare Rd (flood recovery, reopening date unknown). Titus Canyon Rd is scheduled to close Oct 1, 2026 – Sep 30, 2027 for repairs. Not part of this plan.</span></div>
+      <div class="callout tip"><span class="callout-icon">🎒</span><span><b>Pack:</b> 1 gal water/person/day, snacks, sunscreen, hats, layers, headlamps, a small cooler, card games and a stargazing app.</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Eating around Stovepipe Wells</div>
+      <div class="rest-item"><div class="rest-icon" style="background:#FDF6E3">🍽</div><div><div class="rest-name">Toll Road Restaurant</div><div class="rest-detail">Full dinner menu, breakfast buffet from 7 am, box lunches. Thanksgiving dinner plan.</div></div><div class="rest-price">$$</div></div>
+      <div class="rest-item"><div class="rest-icon" style="background:#EDF4EE">🍺</div><div><div class="rest-name">Badwater Saloon</div><div class="rest-detail">Pub fare, burgers, kid-friendly. Next to the restaurant.</div></div><div class="rest-price">$</div></div>
+      <div class="rest-item"><div class="rest-icon" style="background:#FBF0EB">🛒</div><div><div class="rest-name">General Store</div><div class="rest-detail">Snacks, sandwiches, ice, water, souvenirs. Gas station on-site.</div></div><div class="rest-price">$</div></div>
+    </div>
+  </div>
+
+  <div class="day-section" id="d0">
+    <div class="day-hero theme-gold">
+      <div class="day-hero-label">Day 0 · Wednesday Nov 25</div>
+      <div class="day-hero-title">Road trip + Alabama Hills</div>
+      <div class="day-hero-sub">San Ramon → Lone Pine · sunset among the boulders</div>
+    </div>
+<div class="callout info"><span class="callout-icon">ℹ️</span><span>Optional but recommended: breaking up the ~8–9 hr drive from San Ramon lets you arrive in the park rested, with a fun morning in the Alabama Hills on the way in. Pick any Lone Pine / Independence motel. Thanksgiving-week rooms go fast, so <b>book now</b>.</span></div><div class="card"><div class="card-label">Schedule</div><div class="timeline"><div class="tl-item"><div class="tl-left"><div class="tl-dot gold"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">~8:00 am</div><div class="tl-title">Leave San Ramon</div><div class="tl-desc">I-580 E → I-205 → CA-99 S → Bakersfield → CA-58 E → CA-14 N → US-395 N to Lone Pine (~7 hrs of driving). Check Caltrans <b>quickmap.dot.ca.gov</b> that morning; the Tehachapi pass can see snow in late Nov.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot gold"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">~12:30 pm</div><div class="tl-title">Lunch break: Mojave / Inyokern / Ridgecrest</div><div class="tl-desc">Fill the tank in Ridgecrest or Olancha. Gas inside the park is much pricier.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot gold"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">~3:30 pm</div><div class="tl-title">Arrive Lone Pine, check in</div><div class="tl-desc">Dow Villa Motel, Frontier Motel, or similar. Confirm the friends have their rooms too.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot gold"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">4:00 pm</div><div class="tl-title">Alabama Hills golden hour</div><div class="tl-desc">Movie Road + <b>Mobius Arch Loop</b> (0.6 mi, easy). Kids can scramble the rounded boulders while the Sierra glows pink at sunset (~4:45 pm). Mt. Whitney is the peak behind you.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot gold"></div></div><div class="tl-right"><div class="tl-time">6:00 pm</div><div class="tl-title">Dinner in Lone Pine</div><div class="tl-desc">Alabama Hills Cafe, Seasons Restaurant, or Lone Pine Pizza. Early night: tomorrow is travel + Thanksgiving.</div></div></div></div></div>
+  </div>
+  <div class="day-section" id="d1">
+    <div class="day-hero theme-orange">
+      <div class="day-hero-label">Day 1 · Thursday Nov 26 · Thanksgiving</div>
+      <div class="day-hero-title">Arrive + Thanksgiving dinner</div>
+      <div class="day-hero-sub">Lone Pine → Stovepipe Wells · dunes at sunset · turkey at the Toll Road</div>
+    </div>
+<div class="callout tip"><span class="callout-icon">🦃</span><span><b>Thanksgiving dinner: Toll Road Restaurant</b> (the on-site restaurant at Stovepipe Wells) is a short walk from your room. <b>Call (760) 786-7090 or the front desk now</b> to reserve for 6 and to confirm the Thanksgiving menu and seating times. I could not confirm a published holiday menu online.</span></div><div class="card"><div class="card-label">Schedule</div><div class="timeline"><div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">8:00 am</div><div class="tl-title">Lone Pine → Stovepipe Wells</div><div class="tl-desc">CA-136 E → CA-190 E, about 1 hr 45 min. Gas up in Lone Pine first (nothing else until Panamint Springs).</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">~9:15 am</div><div class="tl-title">Father Crowley Vista Point</div><div class="tl-desc"><b>Father Crowley Vista Point</b> overlooks Rainbow Canyon, where military jets sometimes fly below you. Quick stop. Then the long descent into Panamint Valley.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">~10:30 am</div><div class="tl-title">Arrive Stovepipe Wells Village</div><div class="tl-desc">Ask for early check-in; otherwise drop bags and explore. Stock the room cooler at the General Store (no in-room kitchens).</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">12:00 pm</div><div class="tl-title">Easy lunch</div><div class="tl-desc">Toll Road Restaurant or box lunches from the General Store.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">1:30 pm</div><div class="tl-title">Pool + rest</div><div class="tl-desc">Quiet hour after the drive. Kids can burn energy walking the village loop.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">3:45 pm</div><div class="tl-title"><b>Mesquite Flat Sand Dunes at sunset</b></div><div class="tl-desc">2 mi from the hotel. Walk up the main dune (~1 mi, soft sand, no trail). Sunset ~4:50 pm; bring shoes you do not mind filling with sand. Great late light for photos of the whole family.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">6:00 pm</div><div class="tl-title">🦃 Thanksgiving dinner: Toll Road Restaurant</div><div class="tl-desc">Pre-book for your group of 6. Casual Old West décor, a classic turkey-and-trimmings style meal is typical, but verify the menu and price (≈$30–45 pp likely; confirm).</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot orange"></div></div><div class="tl-right"><div class="tl-time">8:00 pm</div><div class="tl-title">Moonlit dunes or stargazing</div><div class="tl-desc">The moon is nearly full around Thanksgiving, so skies will be bright. Moonlit walks on the dunes are the trade-off. Lights-out stargazing improves each night after.</div></div></div></div></div>
+  </div>
+  <div class="day-section" id="d2">
+    <div class="day-hero theme-purple">
+      <div class="day-hero-label">Day 2 · Friday Nov 27</div>
+      <div class="day-hero-title">Badlands + Badwater</div>
+      <div class="day-hero-sub">Zabriskie Point · Golden Canyon loop · Artists Palette · lowest point in North America</div>
+    </div>
+<div class="callout warn"><span class="callout-icon">⚠️</span><span>This is the big adventure day: about 4 hrs of driving and a 4-mile hike. Pack 1 gal water per person, snacks, sun protection, and layers. Fill the tank at Furnace Creek (30 min from Stovepipe). <b>Check NPS conditions page that morning</b> for trail and road status.</span></div><div class="card"><div class="card-label">Schedule</div><div class="timeline"><div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">7:00 am</div><div class="tl-title">Breakfast at Toll Road</div><div class="tl-desc">Breakfast buffet starts 7 am.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">7:45 am</div><div class="tl-title">Drive to Zabriskie Point (~35 min)</div><div class="tl-desc">Morning light on the golden badlands, and Manly Beacon. Short paved walk up from the lot.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">8:45 am</div><div class="tl-title"><b>Golden Canyon → Gower Gulch Loop</b> (4.3 mi, ~800 ft gain)</div><div class="tl-desc">The strenuous highlight. Up Golden Canyon to the <b>Red Cathedral</b> cliffs, over the badlands ridge, back down Gower Gulch. Allow 3 hrs with kids. Shorter bail-out: Golden Canyon out-and-back to Red Cathedral (~3 mi round trip).</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">12:15 pm</div><div class="tl-title">Lunch at Furnace Creek</div><div class="tl-desc">Furnace Creek Ranch has casual options (Last Kick Saloon / general store). Concessionaire changed recently, so verify hours. Or picnic from Stovepipe.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">1:30 pm</div><div class="tl-title"><b>Artists Drive + Artists Palette</b></div><div class="tl-desc">9-mile one-way loop. Multi-colored hills of volcanic minerals. Park at the Palette and wander.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">2:30 pm</div><div class="tl-title">Devil’s Golf Course</div><div class="tl-desc">Jagged salt formations, listen for the crackle as they expand in heat. Short walk.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">3:15 pm</div><div class="tl-title">Natural Bridge</div><div class="tl-desc">1 mi round trip, easy. Kids love the rock arch overhead.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">3:55 pm</div><div class="tl-title"><b>Badwater Basin</b> (−282 ft)</div><div class="tl-desc">North America’s lowest point. Walk out a mile on the salt flats for the polygons. Golden light before sunset (~4:50 pm).</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">4:45 pm</div><div class="tl-title">Drive back to Stovepipe (~1 hr 15 min)</div><div class="tl-desc">Roads are fine at dusk, but watch for wildlife.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot purple"></div></div><div class="tl-right"><div class="tl-time">6:30 pm</div><div class="tl-title">Dinner + pool/hot shower</div><div class="tl-desc">Toll Road Restaurant or Badwater Saloon (pub fare, kid-friendly).</div></div></div></div></div><div class="callout info"><span class="callout-icon">ℹ️</span><span>Telescope Peak (14 mi RT, 3,000+ ft) is <b>not recommended</b> for the kids in late November; the high-elevation trail often has snow and ice and the 4WD road to the trailhead may be closed.</span></div>
+  </div>
+  <div class="day-section" id="d3">
+    <div class="day-hero theme-green">
+      <div class="day-hero-label">Day 3 · Saturday Nov 28</div>
+      <div class="day-hero-title">Slow day + dark skies</div>
+      <div class="day-hero-sub">Mosaic Canyon · pool · stargazing</div>
+    </div>
+<div class="callout tip"><span class="callout-icon">🌿</span><span>Lighter day: one great morning hike near the hotel, a long afternoon break, and a dark-sky evening.</span></div><div class="card"><div class="card-label">Schedule</div><div class="timeline"><div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">8:30 am</div><div class="tl-title">Breakfast, no rush</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">9:30 am</div><div class="tl-title"><b>Mosaic Canyon</b> (up to 4 mi RT)</div><div class="tl-desc">15 min from the hotel; 2.25 mi graded dirt road, passable by sedan (ask a ranger if it has rained). Polished marble walls, then a scramble over the boulder jam at ~1.3 mi. Kids can turn around at the narrows; adults can push to the dryfall.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">12:30 pm</div><div class="tl-title">Lunch + pool time</div><div class="tl-desc">Spa-fed pool and loungers. Bring books and cards for a real break.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">2:30 pm</div><div class="tl-title">Optional: Salt Creek + Harmony Borax Works</div><div class="tl-desc"><b>Salt Creek</b> (0.5 mi boardwalk) has pupfish, and <b>Harmony Borax Works</b> has old 20-mule-team wagons. About 30 min each way. Easy and educational for the kids; skip if everyone wants to relax.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">5:30 pm</div><div class="tl-title">Dinner</div><div class="tl-desc">Toll Road Restaurant or Badwater Saloon.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot green"></div></div><div class="tl-right"><div class="tl-time">6:45 pm</div><div class="tl-title"><b>Stargazing</b></div><div class="tl-desc">Death Valley is an International Dark Sky Park. The waning moon rises later each night, giving a dark window early in the evening. Walk out to the dunes parking lot or the field next to the hotel. Download a stargazing app (Stellarium or SkyView) beforehand. Bring jackets and blankets.</div></div></div></div></div>
+  </div>
+  <div class="day-section" id="d4">
+    <div class="day-hero theme-blue">
+      <div class="day-hero-label">Day 4 · Sunday Nov 29</div>
+      <div class="day-hero-title">Check out + head home</div>
+      <div class="day-hero-sub">Stovepipe Wells → San Ramon</div>
+    </div>
+<div class="card"><div class="card-label">Schedule</div><div class="timeline"><div class="tl-item"><div class="tl-left"><div class="tl-dot blue"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">7:30 am</div><div class="tl-title">Breakfast + check out</div><div class="tl-desc">Fill gas before leaving: Stovepipe Wells is expensive but safe. Hwy 190 west is empty for 70+ miles.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot blue"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">8:30 am</div><div class="tl-title">Drive Hwy 190 west → Panamint Springs → Olancha</div><div class="tl-desc">Stop at the <b>Panamint Dunes viewpoint</b> and the <b>Father Crowley</b> overlook if you skipped them going in.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot blue"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">11:30 am</div><div class="tl-title">Lunch in Lone Pine or Olancha</div><div class="tl-desc">Alabama Hills Cafe / Seasons / Fat Cat Cafe in Olancha.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot blue"></div><div class="tl-connector"></div></div><div class="tl-right"><div class="tl-time">12:30 pm</div><div class="tl-title">US-395 S → CA-14 → CA-58 → Bakersfield</div><div class="tl-desc">Heavy Thanksgiving Sunday traffic is likely from Bakersfield north on CA-99 and I-580. Check Google Maps before leaving.</div></div></div>
+<div class="tl-item"><div class="tl-left"><div class="tl-dot blue"></div></div><div class="tl-right"><div class="tl-time">~6:30 pm</div><div class="tl-title">Home in San Ramon</div><div class="tl-desc">Arrive by dinner, or grab a quick bite in Tracy/Manteca.</div></div></div></div></div><div class="callout tip"><span class="callout-icon">📋</span><span>Leave early. Sunday after Thanksgiving is one of the busiest driving days of the year.</span></div>
+  </div>
+</div>
+
+<script>
+function showDay(id, tabEl) {
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const ids = ['overview','d0','d1','d2','d3','d4'];
+  const tabs = document.querySelectorAll('.strip-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  const tab = tabEl || tabs[ids.indexOf(id)];
+  tab.classList.add('active');
+  tab.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
